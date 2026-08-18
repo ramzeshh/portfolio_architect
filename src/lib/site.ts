@@ -19,6 +19,16 @@ const schema = z.object({
     telegram: z.string().url(),
   }),
   resume_pdf: z.string().default(''),      // '' -> button hidden (D15)
+  // edited by hand in the GitHub web UI: never fail the build on a missing scheme
+  profiles: z
+    .array(z.string())
+    .default([])
+    .transform((urls) =>
+      urls
+        .map((u) => u.trim())
+        .filter(Boolean)
+        .map((u) => (/^https?:\/\//i.test(u) ? u : `https://${u}`)),
+    ),
   seo: z.object({
     title: z.string(),
     description: z.string(),

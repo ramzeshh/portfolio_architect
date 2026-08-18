@@ -16,11 +16,14 @@ const { Content } = await render(p);
 const d = p.data;
 
 const title =
+  d.seo_title ??
   [d.title, d.type, d.location].filter(Boolean).join(' — ') + ' | Роман Меркелло, архитектор';
 const description =
+  d.seo_description ??
   `${d.title}${d.location ? ', ' + d.location : ''} — ${d.type.toLowerCase()}` +
-  `${d.developer ? ', застройщик «' + d.developer + '»' : ''}` +
-  `${d.year ? ', ' + d.year : ''}. Проект в портфолио архитектора Романа Меркелло.`;
+    `${d.developer ? ', застройщик «' + d.developer + '»' : ''}` +
+    `${d.year ? ', ' + d.year : ''}. Проект в портфолио архитектора Романа Меркелло.`;
+const heading = d.h1_suffix ? `${d.title} — ${d.h1_suffix}` : d.title;
 
 const meta: { label: string; value: string }[] = [
   { label: 'Тип', value: d.type },
@@ -30,8 +33,11 @@ const meta: { label: string; value: string }[] = [
   ...(d.year ? [{ label: 'Год', value: String(d.year) }] : []),
 ];
 
-function altFor(img: { caption?: string }) {
-  return img.caption ?? `${d.title} — ${d.type}${d.location ? ', ' + d.location : ''}`;
+const place = d.location ? `, ${d.location}` : '';
+function altFor(img: { caption?: string }, i: number) {
+  return img.caption
+    ? `${d.title}${place} — ${img.caption}`
+    : `${d.title}${place} — ${d.type.toLowerCase()}, визуализация ${i + 1}`;
 }
 const images = [...d.renders, ...d.drawings];
 const og = await getImage({ src: d.cover, width: 1200, format: 'jpeg' });
@@ -50,7 +56,7 @@ const jsonLd = [
   <TopNav />
   <div class="pad">
     <p class="back back-top"><a href={withBase('/#work')}>← Все проекты</a></p>
-    <div class="section-head"><h1>{d.title}</h1></div>
+    <div class="section-head"><h1>{heading}</h1></div>
     <div class="p-meta">
       {meta.map((m) => (
         <div class="row"><span class="label">{m.label}</span><span class="val">{m.value}</span></div>
@@ -63,7 +69,7 @@ const jsonLd = [
           src={img.file}
           widths={[480, 960, 1600]}
           format="webp"
-          alt={altFor(img)}
+          alt={altFor(img, i)}
           loading={i === 0 ? 'eager' : 'lazy'}
         />
         {img.caption && <figcaption class="img-cap">{img.caption}</figcaption>}

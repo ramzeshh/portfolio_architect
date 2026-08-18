@@ -19,7 +19,7 @@ const person = {
   address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: 'RU' },
   email: `mailto:${site.contacts.email}`,
   url: Astro.site ? new URL(import.meta.env.BASE_URL, Astro.site).href : undefined,
-  sameAs: [site.contacts.telegram],
+  sameAs: [site.contacts.telegram, ...site.profiles],
 };
 ---
 <link rel="canonical" href={canonical} />

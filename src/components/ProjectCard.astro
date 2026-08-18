@@ -10,8 +10,11 @@ interface Props {
 const { project, first = false } = Astro.props;
 const { data } = project;
 
-function altFor(img: { caption?: string }) {
-  return img.caption ?? `${data.title} — ${data.type}${data.location ? ', ' + data.location : ''}`;
+const place = data.location ? `, ${data.location}` : '';
+function altFor(img: { caption?: string }, i = 0) {
+  return img.caption
+    ? `${data.title}${place} — ${img.caption}`
+    : `${data.title}${place} — ${data.type.toLowerCase()}, визуализация ${i + 1}`;
 }
 ---
 <div class="project pad">
@@ -30,7 +33,7 @@ function altFor(img: { caption?: string }) {
         src={img.file}
         widths={[480, 960, 1600]}
         format="webp"
-        alt={altFor(img)}
+        alt={altFor(img, i)}
         loading={first && i === 0 ? 'eager' : 'lazy'}
       />
     ))}

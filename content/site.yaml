@@ -10,9 +10,10 @@ contacts:
   phone: +7 (908) 883-21-82
   telegram: https://t.me/ramzeshh
 resume_pdf: ''
+profiles: [] # profile links -> schema.org sameAs
 seo:
-  title: Роман Меркелло — архитектор, Екатеринбург
-  description: 'Портфолио архитектора Романа Меркелло (Roman Merkello, Екатеринбург): жилая застройка, общественные и социальные объекты — ЖК в Екатеринбурге, Перми, Ижевске, университет в Сургуте. Опыт, инструменты, контакты.'
+  title: "Роман Меркелло — архитектор, Екатеринбург | Портфолио"
+  description: "Портфолио архитектора Романа Меркелло (Roman Merkello), Екатеринбург: жилая застройка и общественные здания, стадии П и Р, BIM в Revit. Проекты и контакты."
 metrika_id: ''
 yandex_verification: ''
 google_verification: ''
