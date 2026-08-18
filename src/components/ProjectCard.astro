@@ -33,6 +33,7 @@ function altFor(img: { caption?: string }, i = 0) {
     {data.developer && <div class="row"><span class="label">Застройщик</span><span class="val">{data.developer}</span></div>}
     {data.stage && <div class="row"><span class="label">Стадия</span><span class="val">{data.stage}</span></div>}
     {data.year && <div class="row"><span class="label">Год</span><span class="val">{data.year}</span></div>}
+    <a class="p-more" href={withBase(`/projects/${project.id}/`)}>Подробнее о проекте →</a>
   </div>
   <div class="p-media"><div class="p-carousel" data-carousel>
   <div class="p-carousel-track" data-lightbox>
