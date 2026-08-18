@@ -1,0 +1,73 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import TopNav from '../../components/TopNav.astro';
+import Footer from '../../components/Footer.astro';
+import { withBase } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((p) => ({ params: { id: p.id }, props: { p } }));
+}
+
+const { p } = Astro.props;
+const { Content } = await render(p);
+const d = p.data;
+
+const title =
+  [d.title, d.type, d.location].filter(Boolean).join(' — ') + ' | Роман Меркелло, архитектор';
+const description =
+  `${d.title}${d.location ? ', ' + d.location : ''} — ${d.type.toLowerCase()}` +
+  `${d.developer ? ', застройщик «' + d.developer + '»' : ''}` +
+  `${d.year ? ', ' + d.year : ''}. Проект в портфолио архитектора Романа Меркелло.`;
+
+const meta: { label: string; value: string }[] = [
+  { label: 'Тип', value: d.type },
+  ...(d.location ? [{ label: 'Локация', value: d.location }] : []),
+  ...(d.developer ? [{ label: 'Застройщик', value: d.developer }] : []),
+  ...(d.stage ? [{ label: 'Стадия', value: d.stage }] : []),
+  ...(d.year ? [{ label: 'Год', value: String(d.year) }] : []),
+];
+
+function altFor(img: { caption?: string }) {
+  return img.caption ?? `${d.title} — ${d.type}${d.location ? ', ' + d.location : ''}`;
+}
+const images = [...d.renders, ...d.drawings];
+---
+<Base title={title} description={description}>
+  <TopNav />
+  <div class="pad">
+    <div class="section-head"><h1>{d.title}</h1></div>
+    <div class="p-meta">
+      {meta.map((m) => (
+        <div class="row"><span class="label">{m.label}</span><span class="val">{m.value}</span></div>
+      ))}
+    </div>
+    <Content />
+    {images.map((img, i) => (
+      <figure>
+        <Image
+          src={img.file}
+          widths={[480, 960, 1600]}
+          format="webp"
+          alt={altFor(img)}
+          loading={i === 0 ? 'eager' : 'lazy'}
+        />
+        {img.caption && <figcaption class="img-cap">{img.caption}</figcaption>}
+      </figure>
+    ))}
+    <p><a href={withBase('/#work')}>← Все проекты</a></p>
+  </div>
+  <Footer />
+</Base>
+
+<style>
+  /* case page only: these elements did not exist on the original single page,
+     styled to match the original's section-head/img-cap look */
+  .section-head h1 { font-family: var(--serif); font-size: 28px; font-weight: 400; }
+  figure { margin: 24px 0 0; }
+  figure img { width: 100%; height: auto; display: block; }
+  figcaption.img-cap { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin-top: 8px; }
+  .p-meta { margin-bottom: 24px; }
+</style>
