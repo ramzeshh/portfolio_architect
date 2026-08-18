@@ -147,3 +147,8 @@ footer a:hover{color:var(--fg);}
    height. Restore natural aspect ratio. */
 .about-photo img{height:auto;}
 .p-gallery-imgs img{height:auto;}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important;}
+}
