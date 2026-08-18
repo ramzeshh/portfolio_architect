@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import TopNav from '../components/TopNav.astro';
 import Hero from '../components/Hero.astro';
@@ -16,8 +17,11 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
 const count = String(projects.length).padStart(2, '0');
 const enabled = site.sections.filter((s) => s.enabled);
 const divider = '<div class="divider" style="margin:0 clamp(24px,6vw,80px);"></div>';
+const og = projects.length
+  ? await getImage({ src: projects[0].data.cover, width: 1200, format: 'jpeg' })
+  : undefined;
 ---
-<Base title={site.seo.title} description={site.seo.description}>
+<Base title={site.seo.title} description={site.seo.description} ogImage={og?.src}>
   <TopNav />
   {enabled.map((s, i) => (
     <Fragment>

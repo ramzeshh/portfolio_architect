@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://igor-tech.github.io/test-gh-pages/sitemap-index.xml

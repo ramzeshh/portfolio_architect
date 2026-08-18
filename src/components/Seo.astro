@@ -1,0 +1,44 @@
+---
+import { getSite } from '../lib/site';
+
+const site = getSite();
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  jsonLd?: object[];
+}
+const { title, description, ogImage, jsonLd = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  alternateName: site.name_latin,
+  jobTitle: site.job_title,
+  address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: 'RU' },
+  email: `mailto:${site.contacts.email}`,
+  url: Astro.site?.href,
+  sameAs: [site.contacts.telegram],
+};
+---
+<link rel="canonical" href={canonical} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content="ru_RU" />
+{ogImage && <meta property="og:image" content={new URL(ogImage, Astro.site)} />}
+<meta name="twitter:card" content="summary_large_image" />
+{site.yandex_verification && <meta name="yandex-verification" content={site.yandex_verification} />}
+{site.google_verification && <meta name="google-site-verification" content={site.google_verification} />}
+<script type="application/ld+json" set:html={JSON.stringify([person, ...jsonLd])} />
+{site.metrika_id && (
+  <script is:inline define:vars={{ id: site.metrika_id }}>
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],
+    k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+    ym(Number(id), "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true});
+  </script>
+)}
