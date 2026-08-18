@@ -15,12 +15,21 @@ const site = getSite();
 
 <script is:inline>
   (function () {
-    var nav = document.querySelector('.topnav');
-    if (!nav) return;
-    var syncHeight = function () {
+    // view transitions wipe the inline style on <html> and swap in a new nav,
+    // so re-query and re-sync on every astro:page-load (the script itself is
+    // deduplicated by ClientRouter and runs only once)
+    var observer = new ResizeObserver(function (entries) {
+      var nav = entries[entries.length - 1].target;
       document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+    });
+    var attach = function () {
+      var nav = document.querySelector('.topnav');
+      if (!nav) return;
+      document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+      observer.disconnect();
+      observer.observe(nav);
     };
-    syncHeight();
-    new ResizeObserver(syncHeight).observe(nav);
+    attach();
+    document.addEventListener('astro:page-load', attach);
   })();
 </script>

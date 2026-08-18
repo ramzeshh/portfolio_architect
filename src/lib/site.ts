@@ -19,10 +19,13 @@ const schema = z.object({
     telegram: z.string().url(),
   }),
   resume_pdf: z.string().default(''),      // '' -> button hidden (D15)
-  // edited by hand in the GitHub web UI: never fail the build on a missing scheme
+  // edited by hand in the GitHub web UI: never fail the build on a missing
+  // scheme, an empty `profiles:` key (YAML null) or a single bare value
   profiles: z
-    .array(z.string())
-    .default([])
+    .preprocess(
+      (v) => (v == null ? [] : Array.isArray(v) ? v : [v]),
+      z.array(z.coerce.string()),
+    )
     .transform((urls) =>
       urls
         .map((u) => u.trim())

@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import TopNav from '../../components/TopNav.astro';
 import Footer from '../../components/Footer.astro';
 import { withBase } from '../../lib/url';
+import { imageAlt } from '../../lib/alt';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ data }) => !data.draft);
@@ -33,13 +34,12 @@ const meta: { label: string; value: string }[] = [
   ...(d.year ? [{ label: 'Год', value: String(d.year) }] : []),
 ];
 
-const place = d.location ? `, ${d.location}` : '';
-function altFor(img: { caption?: string }, i: number) {
-  return img.caption
-    ? `${d.title}${place} — ${img.caption}`
-    : `${d.title}${place} — ${d.type.toLowerCase()}, визуализация ${i + 1}`;
-}
 const images = [...d.renders, ...d.drawings];
+// renders and drawings are concatenated: renumber each kind from 1
+const altAt = (img: { caption?: string }, i: number) =>
+  i < d.renders.length
+    ? imageAlt(img, i, 'render', d)
+    : imageAlt(img, i - d.renders.length, 'drawing', d);
 const large = await Promise.all(
   images.map((img) => getImage({ src: img.file, width: Math.min(2500, img.file.width), format: 'webp' })),
 );
@@ -82,7 +82,7 @@ const jsonLd = [
           href={large[i].src}
           data-pswp-width={large[i].attributes.width}
           data-pswp-height={large[i].attributes.height}
-          data-caption={img.caption ?? altFor(img, i)}
+          data-caption={img.caption ?? altAt(img, i)}
           target="_blank"
           rel="noopener"
         >
@@ -90,7 +90,7 @@ const jsonLd = [
             src={img.file}
             widths={[480, 960, 1600]}
             format="webp"
-            alt={altFor(img, i)}
+            alt={altAt(img, i)}
             loading={i === 0 ? 'eager' : 'lazy'}
           />
         </a>

@@ -4,7 +4,6 @@
 ---
 <script>
   import PhotoSwipeLightbox from 'photoswipe/lightbox';
-  import 'photoswipe/style.css';
 
   let lightbox: PhotoSwipeLightbox | undefined;
 
@@ -13,8 +12,14 @@
     lightbox = new PhotoSwipeLightbox({
     gallery: '[data-lightbox]',
     children: 'a.lb',
-    pswpModule: () => import('photoswipe'),
-    secondaryZoomLevel: 1, // double-tap -> 100% of the 2500px variant
+    // CSS loads lazily with the core module so no page pays for it up front
+    pswpModule: async () => {
+      await import('photoswipe/style.css');
+      return import('photoswipe');
+    },
+    // double-tap -> at least 100%; sources are ~1200px, so plain `1` would
+    // equal the fit level on wide screens and disable zoom entirely
+    secondaryZoomLevel: (levels) => Math.max(1, levels.fit * 2),
     maxZoomLevel: 4,
     wheelToZoom: true, // mouse wheel zooms smoothly (pinch does the same on touch)
     bgOpacity: 0.94,

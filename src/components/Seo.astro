@@ -40,5 +40,12 @@ const person = {
     k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
     (window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
     ym(Number(id), "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true});
+    // ClientRouter navigations do not reload the page, so send hits manually;
+    // the first astro:page-load is the landing already counted by init
+    var ymFirstLoad = true;
+    document.addEventListener("astro:page-load", function () {
+      if (ymFirstLoad) { ymFirstLoad = false; return; }
+      ym(Number(id), "hit", location.href, { title: document.title });
+    });
   </script>
 )}

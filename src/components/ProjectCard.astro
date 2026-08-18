@@ -3,6 +3,7 @@ import { Image, getImage } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import type { ImageMetadata } from 'astro';
 import { withBase } from '../lib/url';
+import { imageAlt } from '../lib/alt';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -18,12 +19,6 @@ const zoom = (img: { file: ImageMetadata }) =>
 const renderLarge = await Promise.all(data.renders.map(zoom));
 const drawingLarge = await Promise.all(data.drawings.map(zoom));
 
-const place = data.location ? `, ${data.location}` : '';
-function altFor(img: { caption?: string }, i = 0) {
-  return img.caption
-    ? `${data.title}${place} — ${img.caption}`
-    : `${data.title}${place} — ${data.type.toLowerCase()}, визуализация ${i + 1}`;
-}
 ---
 <div class="project pad">
   <div class="p-meta">
@@ -44,7 +39,7 @@ function altFor(img: { caption?: string }, i = 0) {
         href={renderLarge[i].src}
         data-pswp-width={renderLarge[i].attributes.width}
         data-pswp-height={renderLarge[i].attributes.height}
-        data-caption={altFor(img, i)}
+        data-caption={imageAlt(img, i, 'render', data)}
         target="_blank"
         rel="noopener"
       >
@@ -52,7 +47,7 @@ function altFor(img: { caption?: string }, i = 0) {
           src={img.file}
           widths={[480, 960, 1600]}
           format="webp"
-          alt={altFor(img, i)}
+          alt={imageAlt(img, i, 'render', data)}
           loading={first && i === 0 ? 'eager' : 'lazy'}
         />
       </a>
@@ -75,11 +70,11 @@ function altFor(img: { caption?: string }, i = 0) {
           href={drawingLarge[di].src}
           data-pswp-width={drawingLarge[di].attributes.width}
           data-pswp-height={drawingLarge[di].attributes.height}
-          data-caption={img.caption ?? altFor(img)}
+          data-caption={img.caption ?? imageAlt(img, di, 'drawing', data)}
           target="_blank"
           rel="noopener"
         >
-          <Image src={img.file} widths={[480, 960, 1600]} format="webp" alt={altFor(img)} loading="lazy" />
+          <Image src={img.file} widths={[480, 960, 1600]} format="webp" alt={imageAlt(img, di, 'drawing', data)} loading="lazy" />
         </a>
         {img.caption && <div class="img-cap">{img.caption}</div>}
       </Fragment>
@@ -120,6 +115,9 @@ document.querySelectorAll('[data-carousel]').forEach(function(car){
   // touch swipe support (mobile)
   var startX = 0, startY = 0, deltaX = 0, isSwiping = false, suppressClick = false;
   car.addEventListener('touchstart', function(e){
+    // a swipe that ends in a scroll never fires click, so the flag
+    // set in touchend would swallow the next tap — clear it here
+    suppressClick = false;
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
     deltaX = 0;
