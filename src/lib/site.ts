@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import yaml from 'js-yaml';
+import { load } from 'js-yaml';
 import { z } from 'astro/zod';
 
 const SectionId = z.enum(['hero', 'projects', 'about', 'contact', 'custom']);
@@ -40,7 +40,7 @@ export type SiteConfig = z.infer<typeof schema>;
 let cached: SiteConfig | undefined;
 export function getSite(): SiteConfig {
   if (!cached) {
-    cached = schema.parse(yaml.load(fs.readFileSync('content/site.yaml', 'utf8')));
+    cached = schema.parse(load(fs.readFileSync('content/site.yaml', 'utf8')));
   }
   return cached;
 }
