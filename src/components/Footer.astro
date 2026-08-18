@@ -8,6 +8,6 @@ const phoneHref = `tel:${site.contacts.phone.replace(/[^\d+]/g, '')}`;
   <div class="f-links">
     <a href={`mailto:${site.contacts.email}`}>Email</a>
     <a href={phoneHref}>{site.contacts.phone}</a>
-    <a href={site.contacts.telegram} target="_blank">Telegram</a>
+    <a href={site.contacts.telegram} target="_blank" rel="noopener">Telegram</a>
   </div>
 </footer>

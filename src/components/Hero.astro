@@ -9,7 +9,7 @@ const telegramHandle = '@' + site.contacts.telegram.replace(/^https?:\/\/t\.me\/
   <div class="hero-meta">
     <div class="col"><span class="label">Локация</span><span class="val">{site.hero_meta}</span></div>
     <div class="col"><span class="label">Email</span><span class="val"><a href={`mailto:${site.contacts.email}`}>{site.contacts.email}</a></span></div>
-    <div class="col"><span class="label">Telegram</span><span class="val"><a href={site.contacts.telegram} target="_blank">{telegramHandle}</a></span></div>
+    <div class="col"><span class="label">Telegram</span><span class="val"><a href={site.contacts.telegram} target="_blank" rel="noopener">{telegramHandle}</a></span></div>
     <div class="col"><span class="label">Телефон</span><span class="val"><a href={phoneHref}>{site.contacts.phone}</a></span></div>
   </div>
 </div>
