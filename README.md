@@ -91,12 +91,11 @@ Claude/ChatGPT/Copilot: «в репозитории таком-то добавь
 2. Settings → Pages → Source: **GitHub Actions**.
 3. Поменять в `astro.config.mjs`: `site: 'https://<логин>.github.io'`,
    убрать `base`.
-4. Поменять URL в `public/robots.txt` (строка `Sitemap:`).
-5. В README поправить адрес сайта.
-6. Яндекс.Вебмастер: добавить сайт, токен верификации →
+4. В README поправить адрес сайта.
+5. Яндекс.Вебмастер: добавить сайт, токен верификации →
    `yandex_verification` в `site.yaml`; отправить sitemap.
-7. Яндекс.Метрика: создать счётчик → номер в `metrika_id` в `site.yaml`.
-8. Последним — Google Search Console (токен → `google_verification`).
-9. Кастомный домен (когда купится): файл `public/CNAME` с доменом +
+6. Яндекс.Метрика: создать счётчик → номер в `metrika_id` в `site.yaml`.
+7. Последним — Google Search Console (токен → `google_verification`).
+8. Кастомный домен (когда купится): файл `public/CNAME` с доменом +
    A/CNAME-записи у регистратора; GitHub сам поставит 301 со старого
    адреса.
