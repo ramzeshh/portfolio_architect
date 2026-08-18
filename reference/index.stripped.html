@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Роман Меркелло — Архитектор</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Wremena';src:url(src/fonts/wremena.woff) format('woff');font-weight:400;font-style:normal;}@font-face{font-family:'Wremena';src:url(src/fonts/wremena-bold.woff) format('woff');font-weight:700;font-style:normal;}
+
+
+:root{--bg:#0e0e0e;--fg:#e8e6e1;--dim:#7a7872;--line:#2a2a28;--sans:'Roboto',sans-serif;--serif:'Wremena',serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+::selection{background:#e8e6e1;color:#0e0e0e;}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);}
+.pad{padding-left:clamp(24px,6vw,80px);padding-right:clamp(24px,6vw,80px);}
+
+.frame{position:fixed;inset:0;pointer-events:none;z-index:60;}
+.frame::before,.frame::after{content:"";position:absolute;width:14px;height:14px;}
+.frame::before{top:12px;left:12px;border-top:1px solid var(--dim);border-left:1px solid var(--dim);}
+.frame::after{top:12px;right:12px;border-top:1px solid var(--dim);border-right:1px solid var(--dim);}
+.frame .bl,.frame .br{position:absolute;width:14px;height:14px;bottom:12px;}
+.frame .bl{left:12px;border-bottom:1px solid var(--dim);border-left:1px solid var(--dim);}
+.frame .br{right:12px;border-bottom:1px solid var(--dim);border-right:1px solid var(--dim);}
+.frame .sc-l,.frame .sc-r{position:absolute;bottom:16px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);opacity:.6;font-family:var(--sans);}
+.frame .sc-l{left:36px;}
+.frame .sc-r{right:36px;}
+@media(max-width:640px){.frame,.frame *{display:none;}}
+
+.topnav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:28px clamp(24px,6vw,80px);mix-blend-mode:difference;}
+.topnav .mark{font-size:14px;font-weight:500;letter-spacing:.02em;}
+.topnav .links{display:flex;gap:28px;font-size:13px;}
+.topnav .links a{opacity:.6;transition:opacity .2s;}
+.topnav .links a:hover{opacity:1;}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:120px;padding-bottom:80px;}
+.hero-intro{font-family:var(--serif);font-size:clamp(26px,4vw,54px);line-height:1.25;max-width:1100px;font-weight:400;}
+.hero-intro em{font-style:italic;color:var(--dim);}
+.hero-meta{margin-top:48px;display:flex;gap:48px;flex-wrap:wrap;}
+.hero-meta .col .label{display:block;margin-bottom:6px;}
+.hero-meta .col .val{font-size:14px;}
+.hero-meta .col .val a{border-bottom:1px solid var(--line);transition:border-color .2s;}
+.hero-meta .col .val a:hover{border-color:var(--fg);}
+
+.divider{height:1px;background:var(--line);}
+
+.section-head{display:flex;justify-content:space-between;align-items:baseline;padding-top:60px;padding-bottom:40px;}
+.section-head h2{font-family:var(--serif);font-size:22px;font-weight:400;}
+.section-head .count{font-size:13px;color:var(--dim);}
+
+.project{border-top:1px solid var(--line);display:grid;grid-template-columns:380px 1fr;gap:0;}
+.project:last-child{border-bottom:1px solid var(--line);}
+.p-meta{padding:40px clamp(24px,6vw,80px) 40px 0;display:flex;flex-direction:column;gap:20px;}
+.p-meta .row{display:flex;flex-direction:column;gap:4px;}
+.p-meta .row .label{font-size:11px;}
+.p-meta .row .val{font-size:15px;}
+.p-media{background:#181816;display:flex;align-items:center;justify-content:center;height:460px;overflow:hidden;}
+.p-media svg{width:100%;height:100%;opacity:.5;}
+@media(max-width:800px){.project{grid-template-columns:1fr;}.p-meta{padding-right:0;}.p-media{height:320px;}}
+@media(max-width:640px){
+  .p-carousel-track{touch-action:pan-y;}
+  .p-carousel-btn{width:30px;height:30px;background:rgba(0,0,0,.55);}
+  .p-gallery-toggle{padding:14px 20px;font-size:13px;}
+}
+
+.about-grid{display:grid;grid-template-columns:300px 1fr;gap:60px;padding-bottom:80px;}
+.about-photo img{width:100%;display:block;}
+.about-photo .cap{margin-top:12px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);}
+.about-bio{font-family:var(--serif);font-size:clamp(20px,2.5vw,30px);line-height:1.45;margin-bottom:48px;}
+.about-right h3{font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;color:var(--dim);}
+.about-section+.about-section{margin-top:44px;}
+.detail-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;gap:12px;}
+.detail-row .dim{color:var(--dim);text-align:right;}
+.chip-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.chip{font-size:12px;border:1px solid var(--line);padding:6px 14px;border-radius:30px;color:var(--dim);transition:color .2s,border-color .2s;}
+.chip:hover{color:var(--fg);border-color:var(--fg);}
+@media(max-width:800px){.about-grid{grid-template-columns:1fr;gap:40px;}.about-photo{max-width:320px;}}
+
+.resume-row{display:flex;justify-content:space-between;align-items:center;padding:60px 0;flex-wrap:wrap;gap:20px;}
+.resume-row p{color:var(--dim);max-width:400px;font-size:14px;}
+.btn{font-size:12px;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--fg);padding:14px 24px;transition:background .2s,color .2s;font-family:var(--sans);}
+.btn:hover{background:var(--fg);color:var(--bg);}
+
+@media(max-width:600px){
+  html{overflow-x:hidden;}
+  .topnav{padding:18px 20px;flex-wrap:wrap;gap:10px;row-gap:8px;}
+  .topnav .mark{font-size:13px;}
+  .topnav .links{gap:16px;font-size:12px;flex-wrap:wrap;row-gap:6px;}
+  .hero{padding-top:90px;padding-bottom:56px;min-height:auto;}
+  .hero-intro{font-size:clamp(22px,7vw,30px);}
+  .hero-meta{margin-top:32px;gap:24px 32px;}
+  .section-head{padding-top:44px;padding-bottom:28px;flex-wrap:wrap;gap:8px;}
+  .p-meta{padding:28px 0;gap:16px;}
+  .about-grid{padding-bottom:56px;}
+  .about-bio{font-size:clamp(18px,5.5vw,22px);margin-bottom:32px;}
+  .detail-row{font-size:13px;flex-wrap:wrap;}
+  .resume-row{padding:44px 0;flex-direction:column;align-items:flex-start;gap:16px;}
+  .resume-row .btn{width:100%;text-align:center;}
+  footer{flex-direction:column;align-items:flex-start;gap:12px;padding:32px 0;}
+  footer .f-links{flex-wrap:wrap;gap:16px;}
+  .p-gallery-imgs img{width:100%;height:auto;}
+}
+
+
+footer{padding:40px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--dim);}
+footer .f-links{display:flex;gap:24px;}
+footer a{transition:color .2s;}
+footer a:hover{color:var(--fg);}
+
+.p-media img{width:100%;height:100%;object-fit:cover;}
+.p-carousel{position:relative;width:100%;height:100%;overflow:hidden;}
+.p-carousel-track{display:flex;height:100%;transition:transform .4s ease;}
+.p-carousel-track img{width:100%;height:100%;object-fit:cover;flex:0 0 100%;}
+.p-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);color:#fff;border:none;width:34px;height:34px;border-radius:50%;font-family:var(--sans);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:5;}
+.p-carousel-btn:hover{background:rgba(0,0,0,.7);}
+.p-carousel-btn.prev{left:14px;}
+.p-carousel-btn.next{right:14px;}
+.p-carousel-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:5;}
+.p-carousel-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .2s;}
+.p-carousel-dots span.active{background:#fff;}
+
+.p-gallery{padding:0 clamp(24px,6vw,80px) 40px;border-bottom:1px solid var(--line);}
+.p-gallery-toggle{font-family:var(--sans);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg);cursor:pointer;padding:14px 24px;margin:16px 0;border:1px solid var(--fg);background:none;transition:background .2s,color .2s;}
+
+
+.p-gallery-imgs{display:none;flex-direction:column;gap:20px;padding-bottom:40px;}
+.p-gallery-imgs.open{display:flex;}
+.p-gallery-imgs img{width:100%;display:block;}
+.p-gallery-imgs .img-cap{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-top:8px;}
+</style>
+</head>
+<body>
+
+<div class="frame"><div class="bl"></div><div class="br"></div><span class="sc-l">ЕКБ · Р. Меркелло</span><span class="sc-r">М 1:1 · 2026</span></div>
+
+<div class="topnav">
+  <a href="#" class="mark">Роман Меркелло</a>
+  <div class="links"><a href="#work">Проекты</a><a href="#about">Обо мне</a><a href="резюме_Меркелло_Роман.pdf" target="_blank" rel="noopener">Резюме</a><a href="mailto:merkelloroman@rambler.ru">Контакты</a></div>
+</div>
+
+<div class="hero pad">
+  <div class="hero-intro">Роман Меркелло — <em>архитектор</em> из&nbsp;Екатеринбурга. Проектирую жилые и&nbsp;общественные здания на стадиях П и&nbsp;Р — от&nbsp;планировок и&nbsp;BIM‑моделирования до&nbsp;спецификаций и&nbsp;технико-экономических расчётов. Опыт —&nbsp;более&nbsp;3&nbsp;лет.</div>
+  <div class="hero-meta">
+    <div class="col"><span class="label">Локация</span><span class="val">Екатеринбург · готов к переезду</span></div>
+    <div class="col"><span class="label">Email</span><span class="val"><a href="mailto:merkelloroman@rambler.ru">merkelloroman@rambler.ru</a></span></div>
+    <div class="col"><span class="label">Telegram</span><span class="val"><a href="https://t.me/ramzeshh" target="_blank">@ramzeshh</a></span></div>
+    <div class="col"><span class="label">Телефон</span><span class="val"><a href="tel:+79088832182">+7 (908) 883‑21‑82</a></span></div>
+  </div>
+</div>
+
+<div class="divider pad" style="margin:0 clamp(24px,6vw,80px);"></div>
+
+<div class="pad" id="work"><div class="section-head"><h2>Проекты</h2><span class="count label">(06)</span></div></div>
+
+<div class="project pad">
+  <div class="p-meta">
+    <div class="row"><span class="label">Проект</span><span class="val">ЖК «Баден»</span></div>
+    <div class="row"><span class="label">Тип</span><span class="val">Жилая застройка</span></div>
+    <div class="row"><span class="label">Локация</span><span class="val">Пермь</span></div>
+    <div class="row"><span class="label">Стадия</span><span class="val">П</span></div>
+    <div class="row"><span class="label">Год</span><span class="val">2026</span></div>
+  </div>
+  <div class="p-media"><div class="p-carousel" data-carousel>
+  <div class="p-carousel-track"><img src="content/projects/zhk-baden/01.jpg" alt="ЖК Баден — визуализация 1"><img src="content/projects/zhk-baden/02.jpg" alt="ЖК Баден — визуализация 2"><img src="content/projects/zhk-baden/03.jpg" alt="ЖК Баден — визуализация 3"><img src="content/projects/zhk-baden/04.jpg" alt="ЖК Баден — визуализация 4"><img src="content/projects/zhk-baden/05.jpg" alt="ЖК Баден — визуализация 5"></div>
+  <button class="p-carousel-btn prev" data-dir="-1">&#8249;</button>
+  <button class="p-carousel-btn next" data-dir="1">&#8250;</button>
+  <div class="p-carousel-dots"><span class="active"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div>
+</div></div>
+</div>
+<div class="p-gallery pad"><button class="p-gallery-toggle btn" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'Свернуть чертежи ←':'Показать чертежи →'">Показать чертежи →</button><div class="p-gallery-imgs"><img src="content/projects/zhk-baden/06.jpg" alt="План 3 этажа"><div class="img-cap">Секция 3 — План 3 этажа</div><img src="content/projects/zhk-baden/07.jpg" alt="Разрез 6-6"><div class="img-cap">Разрез 6-6, М 1:200</div></div></div>
+<div class="project pad">
+  <div class="p-meta">
+    <div class="row"><span class="label">Проект</span><span class="val">Университет в Сургуте</span></div>
+    <div class="row"><span class="label">Тип</span><span class="val">Общественное здание</span></div>
+    <div class="row"><span class="label">Локация</span><span class="val">Сургут, ИНТЦ «Юнити Парк»</span></div>
+    <div class="row"><span class="label">Стадия</span><span class="val">П</span></div>
+    <div class="row"><span class="label">Год</span><span class="val">2025</span></div>
+  </div>
+  <div class="p-media"><div class="p-carousel" data-carousel>
+  <div class="p-carousel-track"><img src="content/projects/universitet-v-surgute/01.jpg" alt="Университет в Сургуте — визуализация 1"><img src="content/projects/universitet-v-surgute/02.jpg" alt="Университет в Сургуте — визуализация 2"><img src="content/projects/universitet-v-surgute/03.jpg" alt="Университет в Сургуте — визуализация 3"><img src="content/projects/universitet-v-surgute/04.jpg" alt="Университет в Сургуте — визуализация 4"></div>
+  <button class="p-carousel-btn prev" data-dir="-1">&#8249;</button>
+  <button class="p-carousel-btn next" data-dir="1">&#8250;</button>
+  <div class="p-carousel-dots"><span class="active"></span><span class=""></span><span class=""></span><span class=""></span></div>
+</div></div>
+</div>
+<div class="p-gallery pad"><button class="p-gallery-toggle btn" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'Свернуть чертежи ←':'Показать чертежи →'">Показать чертежи →</button><div class="p-gallery-imgs"><img src="content/projects/universitet-v-surgute/05.jpg" alt="ОДИ — план 1 этажа"><div class="img-cap">ОДИ — план 1 этажа</div><img src="content/projects/universitet-v-surgute/06.jpg" alt="План 1-го этажа"><div class="img-cap">План 1-го этажа</div><img src="content/projects/universitet-v-surgute/07.jpg" alt="Разрез 3-3"><div class="img-cap">Разрез 3-3</div></div></div>
+<div class="project pad">
+  <div class="p-meta">
+    <div class="row"><span class="label">Проект</span><span class="val">ЖК «Норильская»</span></div>
+    <div class="row"><span class="label">Тип</span><span class="val">Жилая застройка</span></div>
+    <div class="row"><span class="label">Локация</span><span class="val">Екатеринбург, оз. Шарташ</span></div>
+    <div class="row"><span class="label">Застройщик</span><span class="val">Самолет</span></div>
+    <div class="row"><span class="label">Год</span><span class="val">2024</span></div>
+  </div>
+  <div class="p-media"><div class="p-carousel" data-carousel>
+  <div class="p-carousel-track"><img src="content/projects/zhk-norilskaya/01.jpg" alt="ЖК Норильская — визуализация 1"><img src="content/projects/zhk-norilskaya/02.jpg" alt="ЖК Норильская — визуализация 2"><img src="content/projects/zhk-norilskaya/03.jpg" alt="ЖК Норильская — визуализация 3"><img src="content/projects/zhk-norilskaya/04.jpg" alt="ЖК Норильская — визуализация 4"><img src="content/projects/zhk-norilskaya/05.jpg" alt="ЖК Норильская — визуализация 5"></div>
+  <button class="p-carousel-btn prev" data-dir="-1">&#8249;</button>
+  <button class="p-carousel-btn next" data-dir="1">&#8250;</button>
+  <div class="p-carousel-dots"><span class="active"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div>
+</div></div>
+</div>
+<div class="p-gallery pad"><button class="p-gallery-toggle btn" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'Свернуть чертежи ←':'Показать чертежи →'">Показать чертежи →</button><div class="p-gallery-imgs"><img src="content/projects/zhk-norilskaya/06.jpg" alt="План 1 этажа"><div class="img-cap">Секция 1.1, Секция 1.2 — План 1 этажа</div><img src="content/projects/zhk-norilskaya/07.jpg" alt="Разрез 1-1"><div class="img-cap">Секция 1.1 — Разрез 1-1, Сечение А-А</div><img src="content/projects/zhk-norilskaya/08.jpg" alt="Фасад"><div class="img-cap">Фасад в осях 1.Л–1.А</div></div></div>
+<div class="project pad">
+  <div class="p-meta">
+    <div class="row"><span class="label">Проект</span><span class="val">Детский сад</span></div>
+    <div class="row"><span class="label">Тип</span><span class="val">Социальный объект</span></div>
+    <div class="row"><span class="label">Локация</span><span class="val">Белый Яр</span></div>
+    <div class="row"><span class="label">Стадия</span><span class="val">П</span></div>
+    <div class="row"><span class="label">Год</span><span class="val">2025</span></div>
+  </div>
+  <div class="p-media"><div class="p-carousel" data-carousel>
+  <div class="p-carousel-track"><img src="content/projects/detskiy-sad-belyy-yar/01.jpg" alt="Детский сад — визуализация 3"><img src="content/projects/detskiy-sad-belyy-yar/02.jpg" alt="Детский сад — визуализация 1"><img src="content/projects/detskiy-sad-belyy-yar/03.jpg" alt="Детский сад — визуализация 2"></div>
+  <button class="p-carousel-btn prev" data-dir="-1">&#8249;</button>
+  <button class="p-carousel-btn next" data-dir="1">&#8250;</button>
+  <div class="p-carousel-dots"><span class="active"></span><span class=""></span><span class=""></span></div>
+</div></div>
+</div>
+<div class="p-gallery pad"><button class="p-gallery-toggle btn" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'Свернуть чертежи ←':'Показать чертежи →'">Показать чертежи →</button><div class="p-gallery-imgs"><img src="content/projects/detskiy-sad-belyy-yar/04.jpg" alt="План 1 этажа"><div class="img-cap">План 1 этажа</div><img src="content/projects/detskiy-sad-belyy-yar/05.jpg" alt="Разрез 1-1"><div class="img-cap">Разрез 1-1</div><img src="content/projects/detskiy-sad-belyy-yar/06.jpg" alt="Фасады"><div class="img-cap">Фасады</div></div></div>
+<div class="project pad">
+  <div class="p-meta">
+    <div class="row"><span class="label">Проект</span><span class="val">ЖК «Пергамонт»</span></div>
+    <div class="row"><span class="label">Тип</span><span class="val">Жилая застройка</span></div>
+  </div>
+  <div class="p-media"><div class="p-carousel" data-carousel>
+  <div class="p-carousel-track"><img src="content/projects/zhk-pergamont/01.jpg" alt="ЖК «Пергамонт» — визуализация 1"><img src="content/projects/zhk-pergamont/02.jpg" alt="ЖК «Пергамонт» — визуализация 2"><img src="content/projects/zhk-pergamont/03.jpg" alt="ЖК «Пергамонт» — визуализация 3"></div>
+  <button class="p-carousel-btn prev" data-dir="-1">&#8249;</button>
+  <button class="p-carousel-btn next" data-dir="1">&#8250;</button>
+  <div class="p-carousel-dots"><span class="active"></span><span class=""></span><span class=""></span></div>
+</div></div>
+</div>
+<div class="p-gallery pad"><button class="p-gallery-toggle btn" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'Свернуть чертежи ←':'Показать чертежи →'">Показать чертежи →</button><div class="p-gallery-imgs"><img src="content/projects/zhk-pergamont/04.jpg" alt="План 1 этажа"><div class="img-cap">План 1 этажа</div><img src="content/projects/zhk-pergamont/05.jpg" alt="Разрез Б-Б, узлы примыканий"><div class="img-cap">Разрез Б-Б, узлы примыканий</div></div></div>
+<div class="project pad">
+  <div class="p-meta">
+    <div class="row"><span class="label">Проект</span><span class="val">ЖК в Ижевске</span></div>
+    <div class="row"><span class="label">Тип</span><span class="val">Жилая застройка</span></div>
+    <div class="row"><span class="label">Застройщик</span><span class="val">Талан</span></div>
+    <div class="row"><span class="label">Год</span><span class="val">2025</span></div>
+  </div>
+  <div class="p-media"><div class="p-carousel" data-carousel>
+  <div class="p-carousel-track"><img src="content/projects/zhk-izhevsk/01.jpg" alt="ЖК в Ижевске — визуализация 1"><img src="content/projects/zhk-izhevsk/02.jpg" alt="ЖК в Ижевске — визуализация 2"><img src="content/projects/zhk-izhevsk/03.jpg" alt="ЖК в Ижевске — визуализация 3"><img src="content/projects/zhk-izhevsk/04.jpg" alt="ЖК в Ижевске — визуализация 4"><img src="content/projects/zhk-izhevsk/05.jpg" alt="ЖК в Ижевске — визуализация 5"></div>
+  <button class="p-carousel-btn prev" data-dir="-1">&#8249;</button>
+  <button class="p-carousel-btn next" data-dir="1">&#8250;</button>
+  <div class="p-carousel-dots"><span class="active"></span><span class=""></span><span class=""></span><span class=""></span><span class=""></span></div>
+</div></div>
+</div>
+<div class="p-gallery pad"><button class="p-gallery-toggle btn" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'Свернуть чертежи ←':'Показать чертежи →'">Показать чертежи →</button><div class="p-gallery-imgs"><img src="content/projects/zhk-izhevsk/06.jpg" alt="Секция 4 — План подвала"><div class="img-cap">Секция 4 — План подвала</div><img src="content/projects/zhk-izhevsk/07.jpg" alt="Секция 4 — План 1 этажа"><div class="img-cap">Секция 4 — План 1 этажа</div><img src="content/projects/zhk-izhevsk/08.jpg" alt="Секция 4 — План 2 этажа"><div class="img-cap">Секция 4 — План 2 этажа</div><img src="content/projects/zhk-izhevsk/09.jpg" alt="Секция 4 — План кровли"><div class="img-cap">Секция 4 — План кровли</div><img src="content/projects/zhk-izhevsk/10.jpg" alt="Секция 4 — Разрез 4-4"><div class="img-cap">Секция 4 — Разрез 4-4</div></div></div>
+<div class="divider" style="margin:0 clamp(24px,6vw,80px);"></div>
+
+<div class="pad" id="about">
+  <div class="section-head"><h2>Обо мне</h2></div>
+  <div class="about-grid">
+    <div class="about-photo">
+      <img src="src/assets/site/01.jpg" alt="Роман Меркелло">
+
+    </div>
+    <div>
+      <div class="about-bio">Работаю в&nbsp;«Альтек Проектирование», где отвечаю за архитектурные решения на стадиях П и&nbsp;Р — от&nbsp;планировок и&nbsp;BIM-моделей до&nbsp;спецификаций и&nbsp;расчётов. Учился на&nbsp;архитектора в&nbsp;колледже, сейчас продолжаю образование в&nbsp;УрФУ по&nbsp;специальности «Промышленное и&nbsp;гражданское строительство».</div>
+      <div class="about-section"><h3>Опыт</h3>
+        <div class="detail-row"><span>Архитектор</span><span class="dim">Альтек Проектирование · 2024 — н.в.</span></div>
+        <div class="detail-row"><span>Проектные задачи</span><span class="dim">Разные заказчики · до 2024</span></div>
+      </div>
+      <div class="about-section"><h3>Образование</h3>
+        <div class="detail-row"><span>Архитектура</span><span class="dim">Уральский колледж · 2021–2025</span></div>
+        <div class="detail-row"><span>ПГС</span><span class="dim">УрФУ · 2025–2029</span></div>
+      </div>
+      <div class="about-section"><h3>Инструменты</h3>
+        <div class="chip-wrap">
+          <span class="chip">Revit</span><span class="chip">ArchiCAD</span><span class="chip">AutoCAD</span>
+          <span class="chip">Twinmotion</span><span class="chip">Lumion</span><span class="chip">D5 Render</span>
+          <span class="chip">SketchUp</span><span class="chip">Photoshop</span><span class="chip">Illustrator</span>
+          <span class="chip">Bitrix24</span>
+        </div>
+      </div>
+      <div class="about-section"><h3>Навыки</h3>
+        <div class="detail-row"><span>Разрабатываю архитектурные решения</span><span class="dim">планы, разрезы, узлы, документация</span></div>
+        <div class="detail-row"><span>Строю BIM-модели</span><span class="dim">Revit, семейства, эскизы → модель</span></div>
+        <div class="detail-row"><span>Выполняю технические расчёты</span><span class="dim">ТЭП, теплотехника, энергопаспорт</span></div>
+        <div class="detail-row"><span>Готовлю спецификации</span><span class="dim">отделка, ведомости объёмов работ</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider" style="margin:0 clamp(24px,6vw,80px);"></div>
+
+<div class="pad" id="contact">
+  <div class="resume-row">
+    <p>Готов к&nbsp;сотрудничеству — скачайте резюме с&nbsp;опытом, образованием и&nbsp;инструментами.</p>
+    <a href="резюме_Меркелло_Роман.pdf" class="btn" download>Скачать резюме</a>
+  </div>
+</div>
+
+<div class="divider" style="margin:0 clamp(24px,6vw,80px);"></div>
+
+<footer class="pad">
+  <span>© 2026 Роман Меркелло</span>
+  <div class="f-links">
+    <a href="mailto:merkelloroman@rambler.ru">Email</a>
+    <a href="tel:+79088832182">+7 (908) 883‑21‑82</a>
+    <a href="https://t.me/ramzeshh" target="_blank">Telegram</a>
+  </div>
+</footer>
+
+
+<script>
+document.querySelectorAll('[data-carousel]').forEach(function(car){
+  var track = car.querySelector('.p-carousel-track');
+  var slides = track.querySelectorAll('img');
+  var dots = car.querySelectorAll('.p-carousel-dots span');
+  var idx = 0;
+  function update(){
+    track.style.transform = 'translateX(' + (-idx*100) + '%)';
+    dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+  }
+  car.querySelectorAll('.p-carousel-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      idx = (idx + parseInt(btn.dataset.dir) + slides.length) % slides.length;
+      update();
+    });
+  });
+  dots.forEach(function(d, i){
+    d.addEventListener('click', function(e){
+      e.stopPropagation();
+      idx = i; update();
+    });
+  });
+
+  // touch swipe support (mobile)
+  var startX = 0, startY = 0, deltaX = 0, isSwiping = false;
+  car.addEventListener('touchstart', function(e){
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    deltaX = 0;
+    isSwiping = true;
+    track.style.transition = 'none';
+  }, {passive:true});
+  car.addEventListener('touchmove', function(e){
+    if(!isSwiping) return;
+    var x = e.touches[0].clientX;
+    var y = e.touches[0].clientY;
+    deltaX = x - startX;
+    var deltaY = y - startY;
+    if(Math.abs(deltaX) > Math.abs(deltaY)){
+      track.style.transform = 'translateX(calc(' + (-idx*100) + '% + ' + deltaX + 'px))';
+    }
+  }, {passive:true});
+  car.addEventListener('touchend', function(){
+    if(!isSwiping) return;
+    isSwiping = false;
+    track.style.transition = 'transform .4s ease';
+    var threshold = car.clientWidth * 0.15;
+    if(deltaX < -threshold && idx < slides.length - 1){
+      idx++;
+    } else if(deltaX > threshold && idx > 0){
+      idx--;
+    }
+    update();
+  });
+});
+</script>
+</body>
+</html>
