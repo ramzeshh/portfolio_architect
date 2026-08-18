@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import wremenaUrl from '../fonts/wremena.woff?url';
+import { ClientRouter } from 'astro:transitions';
 import Seo from '../components/Seo.astro';
 import Lightbox from '../components/Lightbox.astro';
 import { getSite } from '../lib/site';
@@ -20,6 +21,7 @@ const { title, description, ogImage, jsonLd } = Astro.props;
   <link rel="preload" href={wremenaUrl} as="font" type="font/woff" crossorigin />
   <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} />
   <Seo title={title} description={description} ogImage={ogImage} jsonLd={jsonLd} />
+  <ClientRouter />
   <slot name="head" />
 </head>
 <body>

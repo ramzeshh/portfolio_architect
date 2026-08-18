@@ -88,6 +88,7 @@ function altFor(img: { caption?: string }, i = 0) {
 </div>
 
 <script>
+function initProjectCards(){
 document.querySelectorAll('[data-carousel]').forEach(function(car){
   var track = car.querySelector('.p-carousel-track');
   var slides = track.querySelectorAll('img');
@@ -160,4 +161,7 @@ document.querySelectorAll('.p-gallery-toggle').forEach(function(btn){
     btn.textContent = imgs.classList.contains('open') ? 'Свернуть чертежи ←' : 'Показать чертежи →';
   });
 });
+}
+// re-runs after every view transition (and on the initial load)
+document.addEventListener('astro:page-load', initProjectCards);
 </script>

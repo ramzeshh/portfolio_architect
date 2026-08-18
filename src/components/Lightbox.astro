@@ -6,7 +6,11 @@
   import PhotoSwipeLightbox from 'photoswipe/lightbox';
   import 'photoswipe/style.css';
 
-  const lightbox = new PhotoSwipeLightbox({
+  let lightbox: PhotoSwipeLightbox | undefined;
+
+  function initLightbox() {
+    lightbox?.destroy();
+    lightbox = new PhotoSwipeLightbox({
     gallery: '[data-lightbox]',
     children: 'a.lb',
     pswpModule: () => import('photoswipe'),
@@ -16,20 +20,23 @@
     bgOpacity: 0.94,
   });
   lightbox.on('uiRegister', () => {
-    lightbox.pswp!.ui!.registerElement({
+    const pswp = lightbox!.pswp!;
+    pswp.ui!.registerElement({
       name: 'caption',
       order: 9,
       isButton: false,
       appendTo: 'root',
       onInit: (el) => {
-        lightbox.pswp!.on('change', () => {
-          const link = lightbox.pswp!.currSlide?.data.element as HTMLElement | undefined;
+        pswp.on('change', () => {
+          const link = pswp.currSlide?.data.element as HTMLElement | undefined;
           el.textContent = link?.dataset.caption ?? '';
         });
       },
     });
   });
   lightbox.init();
+  }
+  document.addEventListener('astro:page-load', initLightbox);
 </script>
 
 <style is:global>
