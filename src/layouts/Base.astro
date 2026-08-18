@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import wremenaUrl from '../fonts/wremena.woff?url';
 import Seo from '../components/Seo.astro';
 import Lightbox from '../components/Lightbox.astro';
 import { getSite } from '../lib/site';
@@ -14,9 +17,7 @@ const { title, description, ogImage, jsonLd } = Astro.props;
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" href={wremenaUrl} as="font" type="font/woff" crossorigin />
   <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} />
   <Seo title={title} description={description} ogImage={ogImage} jsonLd={jsonLd} />
   <slot name="head" />
