@@ -23,9 +23,17 @@ const projects = defineCollection({
     }),
 });
 
+const detailRow = z.object({ label: z.string(), value: z.string() });
+
 const about = defineCollection({
   loader: glob({ pattern: 'about.md', base: './content' }),
-  schema: z.object({ title: z.string().default('Обо мне') }),
+  schema: z.object({
+    title: z.string().default('Обо мне'),
+    experience: z.array(detailRow).default([]),
+    education: z.array(detailRow).default([]),
+    tools: z.array(z.string()).default([]),
+    skills: z.array(detailRow).default([]),
+  }),
 });
 
 export const collections = { projects, about };
