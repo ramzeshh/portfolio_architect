@@ -21,6 +21,9 @@ importers:
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9
+      sharp:
+        specifier: ^0.35.3
+        version: 0.35.3(@types/node@24.13.3)
 
 packages:
 
@@ -1680,8 +1683,7 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
-  '@img/colour@1.1.0':
-    optional: true
+  '@img/colour@1.1.0': {}
 
   '@img/sharp-darwin-arm64@0.35.3':
     optionalDependencies:
@@ -2568,7 +2570,6 @@ snapshots:
       '@img/sharp-win32-ia32': 0.35.3
       '@img/sharp-win32-x64': 0.35.3
       '@types/node': 24.13.3
-    optional: true
 
   shiki@4.4.3:
     dependencies:

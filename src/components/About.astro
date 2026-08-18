@@ -1,0 +1,21 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import aboutPhoto from '../assets/site/01.jpg';
+import { getSite } from '../lib/site';
+
+const site = getSite();
+const [about] = await getCollection('about');
+const { Content } = await render(about);
+---
+<div class="pad" id="about">
+  <div class="section-head"><h2>Обо мне</h2></div>
+  <div class="about-grid">
+    <div class="about-photo">
+      <Image src={aboutPhoto} widths={[480, 960, 1600]} format="webp" alt={site.name} loading="lazy" />
+    </div>
+    <div>
+      <Content />
+    </div>
+  </div>
+</div>

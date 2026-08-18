@@ -1,0 +1,14 @@
+---
+import { getSite } from '../lib/site';
+import { withBase } from '../lib/url';
+const site = getSite();
+---
+<div class="topnav">
+  <a href="#" class="mark">{site.name}</a>
+  <div class="links">
+    <a href="#work">Проекты</a>
+    <a href="#about">Обо мне</a>
+    {site.resume_pdf && <a href={withBase(site.resume_pdf)} target="_blank" rel="noopener">Резюме</a>}
+    <a href={`mailto:${site.contacts.email}`}>Контакты</a>
+  </div>
+</div>

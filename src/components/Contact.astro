@@ -1,0 +1,13 @@
+---
+import { getSite } from '../lib/site';
+import { withBase } from '../lib/url';
+const site = getSite();
+---
+<div class="pad" id="contact">
+  <div class="resume-row">
+    <p>Готов к&nbsp;сотрудничеству — скачайте резюме с&nbsp;опытом, образованием и&nbsp;инструментами.</p>
+    {site.resume_pdf && (
+      <a href={withBase(site.resume_pdf)} class="btn" download>Скачать резюме</a>
+    )}
+  </div>
+</div>
