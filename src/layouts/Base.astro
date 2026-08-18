@@ -1,0 +1,22 @@
+---
+import '../styles/global.css';
+import { getSite } from '../lib/site';
+const site = getSite();
+interface Props { title: string; description: string; ogImage?: string }
+const { title, description, ogImage } = Astro.props;
+---
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <slot name="head" />
+</head>
+<body>
+  <slot />
+</body>
+</html>

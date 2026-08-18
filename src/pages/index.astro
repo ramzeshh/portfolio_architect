@@ -1,4 +1,8 @@
 ---
+import Base from '../layouts/Base.astro';
+import { getSite } from '../lib/site';
+const site = getSite();
 ---
-<html lang="ru"><head><meta charset="utf-8"><title>WIP</title></head>
-<body><h1>WIP</h1></body></html>
+<Base title={site.seo.title} description={site.seo.description}>
+  <h1>WIP</h1>
+</Base>
