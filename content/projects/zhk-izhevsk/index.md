@@ -1,0 +1,22 @@
+---
+title: ЖК в Ижевске
+type: Жилая застройка
+location: Ижевск
+developer: Талан
+year: 2025
+order: 6
+cover: ./01.jpg
+renders:
+  - { file: ./01.jpg }
+  - { file: ./02.jpg }
+  - { file: ./03.jpg }
+  - { file: ./04.jpg }
+  - { file: ./05.jpg }
+drawings:
+  - { file: ./06.jpg, caption: "Секция 4 — План подвала" }
+  - { file: ./07.jpg, caption: "Секция 4 — План 1 этажа" }
+  - { file: ./08.jpg, caption: "Секция 4 — План 2 этажа" }
+  - { file: ./09.jpg, caption: "Секция 4 — План кровли" }
+  - { file: ./10.jpg, caption: "Секция 4 — Разрез 4-4" }
+---
+ЖК в Ижевске — жилая застройка, застройщик «Талан», 2025 год.

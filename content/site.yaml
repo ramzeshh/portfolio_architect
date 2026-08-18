@@ -1,0 +1,37 @@
+name: Роман Меркелло
+name_latin: Roman Merkello
+job_title: Архитектор
+city: Екатеринбург
+tagline: "Роман Меркелло — <em>архитектор</em> из\_Екатеринбурга. Проектирую жилые и\_общественные здания на стадиях П и\_Р — от\_планировок и\_BIM‑моделирования до\_спецификаций и\_технико-экономических расчётов. Опыт —\_более\_3\_лет."
+hero_meta: Екатеринбург · готов к переезду
+chips:
+  - Revit
+  - ArchiCAD
+  - AutoCAD
+  - Twinmotion
+  - Lumion
+  - D5 Render
+  - SketchUp
+  - Photoshop
+  - Illustrator
+  - Bitrix24
+contacts:
+  email: merkelloroman@rambler.ru
+  phone: +7 (908) 883-21-82
+  telegram: https://t.me/ramzeshh
+resume_pdf: ''
+seo:
+  title: Роман Меркелло — архитектор, Екатеринбург
+  description: 'Портфолио архитектора Романа Меркелло (Roman Merkello, Екатеринбург): жилая застройка, общественные и социальные объекты — ЖК в Екатеринбурге, Перми, Ижевске, университет в Сургуте. Опыт, инструменты, контакты.'
+metrika_id: ''
+yandex_verification: ''
+google_verification: ''
+sections:
+  - id: hero
+    enabled: true
+  - id: projects
+    enabled: true
+  - id: about
+    enabled: true
+  - id: contact
+    enabled: true
