@@ -49,6 +49,7 @@ const jsonLd = [
 <Base title={title} description={description} ogImage={og.src} jsonLd={jsonLd}>
   <TopNav />
   <div class="pad">
+    <p class="back-top"><a href={withBase('/#work')}>← Все проекты</a></p>
     <div class="section-head"><h1>{d.title}</h1></div>
     <div class="p-meta">
       {meta.map((m) => (
@@ -77,6 +78,9 @@ const jsonLd = [
   /* case page only: these elements did not exist on the original single page,
      styled to match the original's section-head/img-cap look */
   .section-head h1 { font-family: var(--serif); font-size: 28px; font-weight: 400; }
+  .back-top { margin-top: 96px; font-size: 13px; }
+  .back-top a { color: var(--dim); transition: color .2s; }
+  .back-top a:hover { color: var(--fg); }
   figure { margin: 24px 0 0; }
   figure img { width: 100%; height: auto; display: block; }
   figcaption.img-cap { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin-top: 8px; }
