@@ -38,7 +38,7 @@ const og = projects.length
       ) :
       s.id === 'about' ? <About /> :
       s.id === 'contact' ? <Contact /> :
-      <CustomSection />}
+      <CustomSection section={s} />}
     </Fragment>
   ))}
   <Footer />

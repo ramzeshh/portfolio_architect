@@ -1,10 +1,10 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import { getSite } from '../lib/site';
+import type { SiteConfig } from '../lib/site';
 
-const site = getSite();
-const section = site.sections.find((s) => s.id === 'custom' && s.enabled);
+interface Props { section: SiteConfig['sections'][number] }
+const { section } = Astro.props;
 
 const assets = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/site/**/*.{jpg,jpeg,png,webp}',
