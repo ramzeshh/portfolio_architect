@@ -135,3 +135,9 @@ footer a:hover{color:var(--fg);}
 .p-gallery-imgs.open{display:flex;}
 .p-gallery-imgs img{width:100%;display:block;}
 .p-gallery-imgs .img-cap{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-top:8px;}
+
+/* appendix (not in the original page): Astro <Image> emits width/height
+   attributes; the original <img> had none, so these rules relied on auto
+   height. Restore natural aspect ratio. */
+.about-photo img{height:auto;}
+.p-gallery-imgs img{height:auto;}
