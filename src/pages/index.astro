@@ -1,8 +1,41 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import TopNav from '../components/TopNav.astro';
+import Hero from '../components/Hero.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import CustomSection from '../components/CustomSection.astro';
 import { getSite } from '../lib/site';
+
 const site = getSite();
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+const count = String(projects.length).padStart(2, '0');
+const enabled = site.sections.filter((s) => s.enabled);
+const divider = '<div class="divider" style="margin:0 clamp(24px,6vw,80px);"></div>';
 ---
 <Base title={site.seo.title} description={site.seo.description}>
-  <h1>WIP</h1>
+  <TopNav />
+  {enabled.map((s, i) => (
+    <Fragment>
+      {/* the original page separates sections with dividers; the first one (after hero) carries .pad */}
+      {i > 0 && <Fragment set:html={i === 1
+        ? '<div class="divider pad" style="margin:0 clamp(24px,6vw,80px);"></div>'
+        : divider} />}
+      {s.id === 'hero' ? <Hero /> :
+      s.id === 'projects' ? (
+        <Fragment>
+          <div class="pad" id="work"><div class="section-head"><h2>Проекты</h2><span class="count label">({count})</span></div></div>
+          {projects.map((p, pi) => <ProjectCard project={p} first={pi === 0} />)}
+        </Fragment>
+      ) :
+      s.id === 'about' ? <About /> :
+      s.id === 'contact' ? <Contact /> :
+      <CustomSection />}
+    </Fragment>
+  ))}
+  <Footer />
 </Base>
