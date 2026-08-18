@@ -40,6 +40,9 @@ function altFor(img: { caption?: string }, i: number) {
     : `${d.title}${place} — ${d.type.toLowerCase()}, визуализация ${i + 1}`;
 }
 const images = [...d.renders, ...d.drawings];
+const large = await Promise.all(
+  images.map((img) => getImage({ src: img.file, width: Math.min(2500, img.file.width), format: 'webp' })),
+);
 const og = await getImage({ src: d.cover, width: 1200, format: 'jpeg' });
 const jsonLd = [
   {
@@ -54,7 +57,7 @@ const jsonLd = [
 ---
 <Base title={title} description={description} ogImage={og.src} jsonLd={jsonLd}>
   <TopNav />
-  <div class="pad">
+  <div class="pad" data-lightbox>
     <p class="back back-top"><a href={withBase('/#work')}>← Все проекты</a></p>
     <div class="section-head"><h1>{heading}</h1></div>
     <div class="p-meta">
@@ -65,13 +68,23 @@ const jsonLd = [
     <Content />
     {images.map((img, i) => (
       <figure>
-        <Image
-          src={img.file}
-          widths={[480, 960, 1600]}
-          format="webp"
-          alt={altFor(img, i)}
-          loading={i === 0 ? 'eager' : 'lazy'}
-        />
+        <a
+          class="lb"
+          href={large[i].src}
+          data-pswp-width={large[i].attributes.width}
+          data-pswp-height={large[i].attributes.height}
+          data-caption={img.caption ?? altFor(img, i)}
+          target="_blank"
+          rel="noopener"
+        >
+          <Image
+            src={img.file}
+            widths={[480, 960, 1600]}
+            format="webp"
+            alt={altFor(img, i)}
+            loading={i === 0 ? 'eager' : 'lazy'}
+          />
+        </a>
         {img.caption && <figcaption class="img-cap">{img.caption}</figcaption>}
       </figure>
     ))}

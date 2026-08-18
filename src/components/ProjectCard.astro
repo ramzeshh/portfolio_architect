@@ -1,6 +1,7 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
 import { withBase } from '../lib/url';
 
 interface Props {
@@ -9,6 +10,13 @@ interface Props {
 }
 const { project, first = false } = Astro.props;
 const { data } = project;
+
+// zoom variants for the lightbox (not loaded until a photo is clicked)
+// clamp to the original size: Astro never upscales, but reports the requested width
+const zoom = (img: { file: ImageMetadata }) =>
+  getImage({ src: img.file, width: Math.min(2500, img.file.width), format: 'webp' });
+const renderLarge = await Promise.all(data.renders.map(zoom));
+const drawingLarge = await Promise.all(data.drawings.map(zoom));
 
 const place = data.location ? `, ${data.location}` : '';
 function altFor(img: { caption?: string }, i = 0) {
@@ -27,15 +35,25 @@ function altFor(img: { caption?: string }, i = 0) {
     {data.year && <div class="row"><span class="label">Год</span><span class="val">{data.year}</span></div>}
   </div>
   <div class="p-media"><div class="p-carousel" data-carousel>
-  <div class="p-carousel-track">
+  <div class="p-carousel-track" data-lightbox>
     {data.renders.map((img, i) => (
-      <Image
-        src={img.file}
-        widths={[480, 960, 1600]}
-        format="webp"
-        alt={altFor(img, i)}
-        loading={first && i === 0 ? 'eager' : 'lazy'}
-      />
+      <a
+        class="lb"
+        href={renderLarge[i].src}
+        data-pswp-width={renderLarge[i].attributes.width}
+        data-pswp-height={renderLarge[i].attributes.height}
+        data-caption={altFor(img, i)}
+        target="_blank"
+        rel="noopener"
+      >
+        <Image
+          src={img.file}
+          widths={[480, 960, 1600]}
+          format="webp"
+          alt={altFor(img, i)}
+          loading={first && i === 0 ? 'eager' : 'lazy'}
+        />
+      </a>
     ))}
   </div>
   <button class="p-carousel-btn prev" data-dir="-1">&#8249;</button>
@@ -47,10 +65,20 @@ function altFor(img: { caption?: string }, i = 0) {
 </div>
 <div class="p-gallery pad">
   <button class="p-gallery-toggle btn">Показать чертежи →</button>
-  <div class="p-gallery-imgs">
-    {data.drawings.map((img) => (
+  <div class="p-gallery-imgs" data-lightbox>
+    {data.drawings.map((img, di) => (
       <Fragment>
-        <Image src={img.file} widths={[480, 960, 1600]} format="webp" alt={altFor(img)} loading="lazy" />
+        <a
+          class="lb"
+          href={drawingLarge[di].src}
+          data-pswp-width={drawingLarge[di].attributes.width}
+          data-pswp-height={drawingLarge[di].attributes.height}
+          data-caption={img.caption ?? altFor(img)}
+          target="_blank"
+          rel="noopener"
+        >
+          <Image src={img.file} widths={[480, 960, 1600]} format="webp" alt={altFor(img)} loading="lazy" />
+        </a>
         {img.caption && <div class="img-cap">{img.caption}</div>}
       </Fragment>
     ))}
@@ -82,7 +110,7 @@ document.querySelectorAll('[data-carousel]').forEach(function(car){
   });
 
   // touch swipe support (mobile)
-  var startX = 0, startY = 0, deltaX = 0, isSwiping = false;
+  var startX = 0, startY = 0, deltaX = 0, isSwiping = false, suppressClick = false;
   car.addEventListener('touchstart', function(e){
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
@@ -100,9 +128,13 @@ document.querySelectorAll('[data-carousel]').forEach(function(car){
       track.style.transform = 'translateX(calc(' + (-idx*100) + '% + ' + deltaX + 'px))';
     }
   }, {passive:true});
+  car.addEventListener('click', function(e){
+    if(suppressClick){ e.preventDefault(); e.stopPropagation(); suppressClick = false; }
+  }, true);
   car.addEventListener('touchend', function(){
     if(!isSwiping) return;
     isSwiping = false;
+    if(Math.abs(deltaX) > 10) suppressClick = true;
     track.style.transition = 'transform .4s ease';
     var threshold = car.clientWidth * 0.15;
     if(deltaX < -threshold && idx < slides.length - 1){

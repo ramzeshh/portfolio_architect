@@ -120,6 +120,7 @@ footer a:hover{color:var(--fg);}
 .p-media img{width:100%;height:100%;object-fit:cover;}
 .p-carousel{position:relative;width:100%;height:100%;overflow:hidden;}
 .p-carousel-track{display:flex;height:100%;transition:transform .4s ease;}
+.p-carousel-track a{flex:0 0 100%;display:block;height:100%;}
 .p-carousel-track img{width:100%;height:100%;object-fit:cover;flex:0 0 100%;}
 .p-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);color:#fff;border:none;width:34px;height:34px;border-radius:50%;font-family:var(--sans);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:5;}
 .p-carousel-btn:hover{background:rgba(0,0,0,.7);}

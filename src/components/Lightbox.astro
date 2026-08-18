@@ -1,0 +1,44 @@
+---
+// Global pinch-zoom lightbox: any <a class="lb"> inside [data-lightbox]
+// opens PhotoSwipe; the core module loads only on first click.
+---
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '[data-lightbox]',
+    children: 'a.lb',
+    pswpModule: () => import('photoswipe'),
+    secondaryZoomLevel: 1, // double-tap -> 100% of the 2500px variant
+    maxZoomLevel: 4,
+    wheelToZoom: true, // mouse wheel zooms smoothly (pinch does the same on touch)
+    bgOpacity: 0.94,
+  });
+  lightbox.on('uiRegister', () => {
+    lightbox.pswp!.ui!.registerElement({
+      name: 'caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'root',
+      onInit: (el) => {
+        lightbox.pswp!.on('change', () => {
+          const link = lightbox.pswp!.currSlide?.data.element as HTMLElement | undefined;
+          el.textContent = link?.dataset.caption ?? '';
+        });
+      },
+    });
+  });
+  lightbox.init();
+</script>
+
+<style is:global>
+  a.lb { cursor: zoom-in; display: block; }
+  .pswp__caption {
+    position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+    max-width: calc(100% - 32px); text-align: center;
+    font: 11px/1.5 var(--sans); text-transform: uppercase; letter-spacing: .06em;
+    color: #e8e6e1; background: rgba(14,14,14,.65); padding: 6px 14px;
+  }
+  .pswp__caption:empty { display: none; }
+</style>
