@@ -129,8 +129,9 @@ footer a:hover{color:var(--fg);}
 .p-carousel-btn.prev{left:14px;}
 .p-carousel-btn.next{right:14px;}
 .p-carousel-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:5;}
-.p-carousel-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .2s;}
-.p-carousel-dots span.active{background:#fff;}
+.p-carousel-dots button{width:22px;height:22px;background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.p-carousel-dots button::before{content:"";width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .2s;}
+.p-carousel-dots button.active::before{background:#fff;}
 
 .p-gallery{padding:0 var(--gutter) 40px;border-bottom:1px solid var(--line);}
 .p-gallery-toggle{font-family:var(--sans);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--fg);cursor:pointer;padding:14px 24px;margin:16px 0;border:1px solid var(--fg);background:none;transition:background .2s,color .2s;}

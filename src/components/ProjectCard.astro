@@ -40,6 +40,7 @@ function altFor(img: { caption?: string }, i = 0) {
     {data.renders.map((img, i) => (
       <a
         class="lb"
+        tabindex={i === 0 ? undefined : -1}
         href={renderLarge[i].src}
         data-pswp-width={renderLarge[i].attributes.width}
         data-pswp-height={renderLarge[i].attributes.height}
@@ -57,10 +58,10 @@ function altFor(img: { caption?: string }, i = 0) {
       </a>
     ))}
   </div>
-  <button class="p-carousel-btn prev" data-dir="-1">&#8249;</button>
-  <button class="p-carousel-btn next" data-dir="1">&#8250;</button>
+  <button class="p-carousel-btn prev" data-dir="-1" aria-label="Предыдущее фото">&#8249;</button>
+  <button class="p-carousel-btn next" data-dir="1" aria-label="Следующее фото">&#8250;</button>
   <div class="p-carousel-dots">
-    {data.renders.map((_, i) => <span class={i === 0 ? 'active' : ''}></span>)}
+    {data.renders.map((_, i) => <button class={i === 0 ? 'active' : ''} aria-label={`Фото ${i + 1}`}></button>)}
   </div>
 </div></div>
 </div>
@@ -90,11 +91,16 @@ function altFor(img: { caption?: string }, i = 0) {
 document.querySelectorAll('[data-carousel]').forEach(function(car){
   var track = car.querySelector('.p-carousel-track');
   var slides = track.querySelectorAll('img');
-  var dots = car.querySelectorAll('.p-carousel-dots span');
+  var dots = car.querySelectorAll('.p-carousel-dots button');
+  var links = track.querySelectorAll('a');
   var idx = 0;
   function update(){
     track.style.transform = 'translateX(' + (-idx*100) + '%)';
     dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+    links.forEach(function(a,i){
+      a.tabIndex = i===idx ? 0 : -1;
+      a.setAttribute('aria-hidden', i===idx ? 'false' : 'true');
+    });
   }
   car.querySelectorAll('.p-carousel-btn').forEach(function(btn){
     btn.addEventListener('click', function(e){
