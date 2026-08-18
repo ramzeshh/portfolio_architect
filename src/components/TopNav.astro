@@ -9,7 +9,7 @@ const site = getSite();
     <a href={withBase('/#work')}>Проекты</a>
     <a href={withBase('/#about')}>Обо мне</a>
     {site.resume_pdf && <a href={withBase(site.resume_pdf)} target="_blank" rel="noopener">Резюме</a>}
-    <a href={`mailto:${site.contacts.email}`}>Контакты</a>
+    <a href={withBase('/#contact')}>Контакты</a>
   </div>
 </div>
 
