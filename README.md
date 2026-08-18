@@ -1,46 +1,102 @@
-# Astro Starter Kit: Basics
+# Портфолио архитектора
 
-```sh
-pnpm create astro@latest -- --template basics
+Сайт-портфолио на [Astro](https://astro.build). Собирается и публикуется
+**автоматически**: после любого изменения в ветке `main` GitHub Actions
+пересобирает сайт за 2–3 минуты (прогресс — во вкладке **Actions**).
+Руками ничего собирать не нужно.
+
+Адрес сайта: https://igor-tech.github.io/test-gh-pages/
+
+## Где что лежит
+
+| Что менять | Файл |
+|---|---|
+| Имя, контакты, описание сайта, порядок секций | `content/site.yaml` |
+| Текст «Обо мне», опыт, образование, инструменты, навыки | `content/about.md` |
+| Проекты (каждый — своя папка) | `content/projects/<проект>/index.md` |
+| Фото проектов | `content/projects/<проект>/*.jpg` |
+
+Всё остальное (`src/`, `.github/`, конфиги) — «машинное отделение», туда
+ходить не нужно.
+
+## Как добавить проект
+
+1. Скопируй любую папку в `content/projects/`, например `zhk-baden`,
+   и переименуй (латиницей, через дефис: `zhk-novyy-proekt`).
+2. Положи туда фото: `01.jpg`, `02.jpg`, … (JPEG «для веба», **до 3 МБ**
+   каждое — иначе репозиторий распухнет; сайт сам сожмёт их в WebP).
+3. Заполни `index.md` по образцу:
+
+```yaml
+---
+title: ЖК «Новый»          # название
+type: Жилая застройка      # тип объекта
+location: Екатеринбург     # можно удалить строку, если не нужно
+developer: Самолет         # можно удалить
+stage: П                   # можно удалить
+year: 2026                 # можно удалить
+order: 7                   # порядок на странице (1 — верхний)
+draft: false               # true = спрятать проект, не удаляя
+cover: ./01.jpg            # обложка (для превью в соцсетях)
+renders:                   # картинки карусели
+  - { file: ./01.jpg }
+  - { file: ./02.jpg }
+drawings:                  # чертежи (открываются кнопкой), подпись обязательна по вкусу
+  - { file: ./03.jpg, caption: "План 1 этажа" }
+---
+Один-два абзаца о проекте — этот текст виден на отдельной странице проекта.
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+4. Закоммить изменения (на github.com: кнопка **Commit changes**). Через
+   2–3 минуты сайт обновится.
 
-## 🚀 Project Structure
+## Как заменить фото
 
-Inside of your Astro project, you'll see the following folders and files:
+Загрузи новый файл **с тем же именем** в папку проекта — и всё.
+Так же меняется фото в «Обо мне»: `src/assets/site/01.jpg`.
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+## Как скрыть/показать секцию или поменять порядок
+
+В `content/site.yaml`, блок `sections`: поменяй порядок строк или поставь
+`enabled: false`.
+
+## Резюме (PDF)
+
+Положи файл `roman-merkello-arhitektor-rezume.pdf` в папку `public/` и в
+`content/site.yaml` укажи:
+
+```yaml
+resume_pdf: /roman-merkello-arhitektor-rezume.pdf
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+Кнопка «Скачать резюме» и ссылка в меню появятся сами. Пока поле пустое —
+их нет.
 
-## 🧞 Commands
+## Правки с ИИ
 
-All commands are run from the root of the project, from a terminal:
+Весь контент — обычные текстовые файлы, поэтому можно просто попросить
+Claude/ChatGPT/Copilot: «в репозитории таком-то добавь проект…» — и
+закоммитить то, что он предложит.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+## Раз в квартал (для SEO)
 
-## 👀 Want to learn more?
+Добавляй новые проекты и обновляй формулировки — поисковики любят живые
+сайты. Названия ЖК и городов в описаниях помогают сайту находиться.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+---
+
+## Чек-лист переноса на основной аккаунт
+
+1. Создать репозиторий `<логин>.github.io`, запушить туда код.
+2. Settings → Pages → Source: **GitHub Actions**.
+3. Поменять в `astro.config.mjs`: `site: 'https://<логин>.github.io'`,
+   убрать `base`.
+4. Поменять URL в `public/robots.txt` (строка `Sitemap:`).
+5. В README поправить адрес сайта.
+6. Яндекс.Вебмастер: добавить сайт, токен верификации →
+   `yandex_verification` в `site.yaml`; отправить sitemap.
+7. Яндекс.Метрика: создать счётчик → номер в `metrika_id` в `site.yaml`.
+8. Последним — Google Search Console (токен → `google_verification`).
+9. Кастомный домен (когда купится): файл `public/CNAME` с доменом +
+   A/CNAME-записи у регистратора; GitHub сам поставит 301 со старого
+   адреса.
