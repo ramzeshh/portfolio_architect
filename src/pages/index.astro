@@ -16,7 +16,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order);
 const count = String(projects.length).padStart(2, '0');
 const enabled = site.sections.filter((s) => s.enabled);
-const divider = '<div class="divider" style="margin:0 clamp(24px,6vw,80px);"></div>';
+const divider = '<div class="divider" style="margin:0 var(--gutter);"></div>';
 const og = projects.length
   ? await getImage({ src: projects[0].data.cover, width: 1200, format: 'jpeg' })
   : undefined;
@@ -27,7 +27,7 @@ const og = projects.length
     <Fragment>
       {/* the original page separates sections with dividers; the first one (after hero) carries .pad */}
       {i > 0 && <Fragment set:html={i === 1
-        ? '<div class="divider pad" style="margin:0 clamp(24px,6vw,80px);"></div>'
+        ? '<div class="divider pad" style="margin:0 var(--gutter);"></div>'
         : divider} />}
       {s.id === 'hero' ? <Hero /> :
       s.id === 'projects' ? (
