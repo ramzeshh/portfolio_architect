@@ -1,4 +1,5 @@
-import fs from 'node:fs';
+// ?raw puts site.yaml into the Vite module graph, so dev HMR picks up edits
+import raw from '../../content/site.yaml?raw';
 import { load } from 'js-yaml';
 import { z } from 'astro/zod';
 
@@ -37,10 +38,7 @@ const schema = z.object({
 
 export type SiteConfig = z.infer<typeof schema>;
 
-let cached: SiteConfig | undefined;
+const site: SiteConfig = schema.parse(load(raw));
 export function getSite(): SiteConfig {
-  if (!cached) {
-    cached = schema.parse(load(fs.readFileSync('content/site.yaml', 'utf8')));
-  }
-  return cached;
+  return site;
 }
