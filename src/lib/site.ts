@@ -6,6 +6,11 @@ import { z } from 'astro/zod';
 const SectionId = z.enum(['hero', 'projects', 'about', 'contact', 'custom']);
 
 const schema = z.object({
+  // same hand-editing tolerance as astro.config.mjs, which reads this key too
+  domain: z
+    .string()
+    .transform((d) => d.trim().replace(/^https?:\/\//i, '').replace(/\/+$/, ''))
+    .refine(Boolean, 'domain is empty'),
   name: z.string(),
   name_latin: z.string(),
   job_title: z.string(),
