@@ -5,13 +5,13 @@
 пересобирает сайт за 2–3 минуты (прогресс — во вкладке **Actions**).
 Руками ничего собирать не нужно.
 
-Адрес сайта: https://igor-tech.github.io/test-gh-pages/
+Адрес сайта: https://www.merkello-arch.online
 
 ## Где что лежит
 
 | Что менять | Файл |
 |---|---|
-| Имя, контакты, описание сайта, порядок секций | `content/site.yaml` |
+| Адрес сайта (домен), имя, контакты, описание, порядок секций | `content/site.yaml` |
 | Текст «Обо мне», опыт, образование, инструменты, навыки | `content/about.md` |
 | Проекты (каждый — своя папка) | `content/projects/<проект>/index.md` |
 | Фото проектов | `content/projects/<проект>/*.jpg` |
@@ -108,13 +108,13 @@ profiles:
 
 1. Создать репозиторий `<логин>.github.io`, запушить туда код.
 2. Settings → Pages → Source: **GitHub Actions**.
-3. Поменять в `astro.config.mjs`: `site: 'https://<логин>.github.io'`,
-   убрать `base`.
+3. Поменять `domain` в `content/site.yaml` — из него собираются `site`
+   в `astro.config.mjs`, канонические ссылки, sitemap и файл `CNAME`.
 4. В README поправить адрес сайта.
 5. Яндекс.Вебмастер: добавить сайт, токен верификации →
    `yandex_verification` в `site.yaml`; отправить sitemap.
 6. Яндекс.Метрика: создать счётчик → номер в `metrika_id` в `site.yaml`.
 7. Последним — Google Search Console (токен → `google_verification`).
-8. Кастомный домен (когда купится): файл `public/CNAME` с доменом +
-   A/CNAME-записи у регистратора; GitHub сам поставит 301 со старого
-   адреса.
+8. Кастомный домен: `domain` в `content/site.yaml` + Settings → Pages →
+   Custom domain (точно тот же вид, с `www` или без) + A/CNAME-записи у
+   регистратора; GitHub сам поставит 301 со старого адреса.

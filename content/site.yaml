@@ -1,3 +1,4 @@
+domain: www.merkello-arch.online # site address; also written to CNAME on build
 name: Роман Меркелло
 name_latin: Roman Merkello
 job_title: Архитектор
