@@ -12,6 +12,10 @@ interface Props {
 const { project, first = false } = Astro.props;
 const { data } = project;
 
+// кнопка "Подробнее о проекте" временно скрыта по просьбе заказчика;
+// чтобы вернуть — поставь true
+const SHOW_MORE_LINK = false;
+
 // zoom variants for the lightbox (not loaded until a photo is clicked)
 // clamp to the original size: Astro never upscales, but reports the requested width
 const zoom = (img: { file: ImageMetadata }) =>
@@ -28,7 +32,7 @@ const drawingLarge = await Promise.all(data.drawings.map(zoom));
     {data.developer && <div class="row"><span class="label">Застройщик</span><span class="val">{data.developer}</span></div>}
     {data.stage && <div class="row"><span class="label">Стадия</span><span class="val">{data.stage}</span></div>}
     {data.year && <div class="row"><span class="label">Год</span><span class="val">{data.year}</span></div>}
-    <a class="p-more" href={withBase(`/projects/${project.id}/`)}>Подробнее о проекте →</a>
+    {SHOW_MORE_LINK && <a class="p-more" href={withBase(`/projects/${project.id}/`)}>Подробнее о проекте →</a>}
   </div>
   <div class="p-media"><div class="p-carousel" data-carousel>
   <div class="p-carousel-track" data-lightbox>
