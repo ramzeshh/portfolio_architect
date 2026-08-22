@@ -1,0 +1,13 @@
+---
+import { getSite } from '../lib/site';
+const site = getSite();
+const phoneHref = `tel:${site.contacts.phone.replace(/[^\d+]/g, '')}`;
+---
+<footer class="pad">
+  <span>© 2026 {site.name}</span>
+  <div class="f-links">
+    <a href={`mailto:${site.contacts.email}`}>Email</a>
+    <a href={phoneHref}>{site.contacts.phone}</a>
+    <a href={site.contacts.telegram} target="_blank" rel="noopener">Telegram</a>
+  </div>
+</footer>

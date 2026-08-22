@@ -1,0 +1,169 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import { withBase } from '../lib/url';
+import { imageAlt } from '../lib/alt';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  first?: boolean;
+}
+const { project, first = false } = Astro.props;
+const { data } = project;
+
+// кнопка "Подробнее о проекте" временно скрыта по просьбе заказчика;
+// чтобы вернуть — поставь true
+const SHOW_MORE_LINK = false;
+
+// zoom variants for the lightbox (not loaded until a photo is clicked)
+// clamp to the original size: Astro never upscales, but reports the requested width
+const zoom = (img: { file: ImageMetadata }) =>
+  getImage({ src: img.file, width: Math.min(2500, img.file.width), format: 'webp' });
+const renderLarge = await Promise.all(data.renders.map(zoom));
+const drawingLarge = await Promise.all(data.drawings.map(zoom));
+
+---
+<div class="project pad">
+  <div class="p-meta">
+    <div class="row"><span class="label">Проект</span><span class="val"><a href={withBase(`/projects/${project.id}/`)}>{data.title}</a></span></div>
+    <div class="row"><span class="label">Тип</span><span class="val">{data.type}</span></div>
+    {data.location && <div class="row"><span class="label">Локация</span><span class="val">{data.location}</span></div>}
+    {data.developer && <div class="row"><span class="label">Застройщик</span><span class="val">{data.developer}</span></div>}
+    {data.stage && <div class="row"><span class="label">Стадия</span><span class="val">{data.stage}</span></div>}
+    {data.year && <div class="row"><span class="label">Год</span><span class="val">{data.year}</span></div>}
+    {SHOW_MORE_LINK && <a class="p-more" href={withBase(`/projects/${project.id}/`)}>Подробнее о проекте →</a>}
+  </div>
+  <div class="p-media"><div class="p-carousel" data-carousel>
+  <div class="p-carousel-track" data-lightbox>
+    {data.renders.map((img, i) => (
+      <a
+        class="lb"
+        tabindex={i === 0 ? undefined : -1}
+        href={renderLarge[i].src}
+        data-pswp-width={renderLarge[i].attributes.width}
+        data-pswp-height={renderLarge[i].attributes.height}
+        data-caption={imageAlt(img, i, 'render', data)}
+        target="_blank"
+        rel="noopener"
+      >
+        <Image
+          src={img.file}
+          widths={[480, 960, 1600]}
+          format="webp"
+          alt={imageAlt(img, i, 'render', data)}
+          loading={first && i === 0 ? 'eager' : 'lazy'}
+        />
+      </a>
+    ))}
+  </div>
+  <button class="p-carousel-btn prev" data-dir="-1" aria-label="Предыдущее фото">&#8249;</button>
+  <button class="p-carousel-btn next" data-dir="1" aria-label="Следующее фото">&#8250;</button>
+  <div class="p-carousel-dots">
+    {data.renders.map((_, i) => <button class={i === 0 ? 'active' : ''} aria-label={`Фото ${i + 1}`}></button>)}
+  </div>
+</div></div>
+</div>
+<div class="p-gallery pad">
+  <button class="p-gallery-toggle btn">Показать чертежи →</button>
+  <div class="p-gallery-imgs" data-lightbox>
+    {data.drawings.map((img, di) => (
+      <Fragment>
+        <a
+          class="lb"
+          href={drawingLarge[di].src}
+          data-pswp-width={drawingLarge[di].attributes.width}
+          data-pswp-height={drawingLarge[di].attributes.height}
+          data-caption={img.caption ?? imageAlt(img, di, 'drawing', data)}
+          target="_blank"
+          rel="noopener"
+        >
+          <Image src={img.file} widths={[480, 960, 1600]} format="webp" alt={imageAlt(img, di, 'drawing', data)} loading="lazy" />
+        </a>
+        {img.caption && <div class="img-cap">{img.caption}</div>}
+      </Fragment>
+    ))}
+  </div>
+</div>
+
+<script>
+function initProjectCards(){
+document.querySelectorAll('[data-carousel]').forEach(function(car){
+  var track = car.querySelector('.p-carousel-track');
+  var slides = track.querySelectorAll('img');
+  var dots = car.querySelectorAll('.p-carousel-dots button');
+  var links = track.querySelectorAll('a');
+  var idx = 0;
+  function update(){
+    track.style.transform = 'translateX(' + (-idx*100) + '%)';
+    dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+    links.forEach(function(a,i){
+      a.tabIndex = i===idx ? 0 : -1;
+      a.setAttribute('aria-hidden', i===idx ? 'false' : 'true');
+    });
+  }
+  car.querySelectorAll('.p-carousel-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      idx = (idx + parseInt(btn.dataset.dir) + slides.length) % slides.length;
+      update();
+    });
+  });
+  dots.forEach(function(d, i){
+    d.addEventListener('click', function(e){
+      e.stopPropagation();
+      idx = i; update();
+    });
+  });
+
+  // touch swipe support (mobile)
+  var startX = 0, startY = 0, deltaX = 0, isSwiping = false, suppressClick = false;
+  car.addEventListener('touchstart', function(e){
+    // a swipe that ends in a scroll never fires click, so the flag
+    // set in touchend would swallow the next tap — clear it here
+    suppressClick = false;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    deltaX = 0;
+    isSwiping = true;
+    track.style.transition = 'none';
+  }, {passive:true});
+  car.addEventListener('touchmove', function(e){
+    if(!isSwiping) return;
+    var x = e.touches[0].clientX;
+    var y = e.touches[0].clientY;
+    deltaX = x - startX;
+    var deltaY = y - startY;
+    if(Math.abs(deltaX) > Math.abs(deltaY)){
+      track.style.transform = 'translateX(calc(' + (-idx*100) + '% + ' + deltaX + 'px))';
+    }
+  }, {passive:true});
+  car.addEventListener('click', function(e){
+    if(suppressClick){ e.preventDefault(); e.stopPropagation(); suppressClick = false; }
+  }, true);
+  car.addEventListener('touchend', function(){
+    if(!isSwiping) return;
+    isSwiping = false;
+    if(Math.abs(deltaX) > 10) suppressClick = true;
+    track.style.transition = 'transform .4s ease';
+    var threshold = car.clientWidth * 0.15;
+    if(deltaX < -threshold && idx < slides.length - 1){
+      idx++;
+    } else if(deltaX > threshold && idx > 0){
+      idx--;
+    }
+    update();
+  });
+});
+
+document.querySelectorAll('.p-gallery-toggle').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var imgs = btn.nextElementSibling;
+    imgs.classList.toggle('open');
+    btn.textContent = imgs.classList.contains('open') ? 'Свернуть чертежи ←' : 'Показать чертежи →';
+  });
+});
+}
+// re-runs after every view transition (and on the initial load)
+document.addEventListener('astro:page-load', initProjectCards);
+</script>

@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { SiteConfig } from '../lib/site';
+
+interface Props { section: SiteConfig['sections'][number] }
+const { section } = Astro.props;
+
+const assets = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/site/**/*.{jpg,jpeg,png,webp}',
+  { eager: true },
+);
+
+function resolveImage(path: string) {
+  const entry = Object.entries(assets).find(([key]) => key.endsWith('/' + path));
+  return entry?.[1]?.default;
+}
+
+const paragraphs = section?.text ? section.text.split(/\n{2,}/) : [];
+---
+{section && (
+  <div class="pad" id="custom">
+    <div class="section-head">
+      {section.heading && <h2>{section.heading}</h2>}
+    </div>
+    {paragraphs.map((p) => <p>{p}</p>)}
+    {section.images.length > 0 && (
+      <div class="custom-images">
+        {section.images.map((path) => {
+          const img = resolveImage(path);
+          return img ? (
+            <Image
+              src={img}
+              widths={[480, 960, 1600]}
+              format="webp"
+              alt={section.heading ?? ''}
+              loading="lazy"
+            />
+          ) : null;
+        })}
+      </div>
+    )}
+  </div>
+)}

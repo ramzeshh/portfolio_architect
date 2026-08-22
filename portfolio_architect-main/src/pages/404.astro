@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import TopNav from '../components/TopNav.astro';
+import Footer from '../components/Footer.astro';
+import { getSite } from '../lib/site';
+import { withBase } from '../lib/url';
+
+const site = getSite();
+---
+<Base title={`Страница не найдена | ${site.name}`} description={site.seo.description}>
+  <TopNav />
+  <div class="pad">
+    <div class="section-head"><h2>Страница не найдена</h2></div>
+    <p><a href={withBase('/')}>← На главную</a></p>
+  </div>
+  <Footer />
+</Base>

@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import aboutPhoto from '../assets/site/01.jpg';
+import { getSite } from '../lib/site';
+
+const site = getSite();
+const [about] = await getCollection('about');
+const { Content } = await render(about);
+const d = about.data;
+const sections: { title: string; rows: { label: string; value: string }[] }[] = [
+  { title: 'Опыт', rows: d.experience },
+  { title: 'Образование', rows: d.education },
+];
+---
+<div class="pad" id="about">
+  <div class="section-head"><h2>{d.title}</h2></div>
+  <div class="about-grid">
+    <div class="about-photo">
+      <Image src={aboutPhoto} widths={[480, 960, 1600]} format="webp" alt={site.name} loading="lazy" />
+    </div>
+    <div>
+      <div class="about-bio"><Content /></div>
+      {sections.map((s) => (
+        <div class="about-section"><h3>{s.title}</h3>
+          {s.rows.map((r) => (
+            <div class="detail-row"><span>{r.label}</span><span class="dim">{r.value}</span></div>
+          ))}
+        </div>
+      ))}
+      <div class="about-section"><h3>Инструменты</h3>
+        <div class="chip-wrap">
+          {d.tools.map((t) => <span class="chip">{t}</span>)}
+        </div>
+      </div>
+      <div class="about-section"><h3>Навыки</h3>
+        {d.skills.map((r) => (
+          <div class="detail-row"><span>{r.label}</span><span class="dim">{r.value}</span></div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
