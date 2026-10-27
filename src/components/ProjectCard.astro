@@ -34,11 +34,12 @@ const drawingLarge = await Promise.all(data.drawings.map(zoom));
     {data.year && <div class="row"><span class="label">Год</span><span class="val">{data.year}</span></div>}
     {SHOW_MORE_LINK && <a class="p-more" href={withBase(`/projects/${project.id}/`)}>Подробнее о проекте →</a>}
   </div>
-  <div class="p-media"><div class="p-carousel" data-carousel>
+  <div class="p-media" style={`--slide-ratio:${Math.max(1.5, Math.min(1.85, (data.renders[0]?.file.width ?? 16) / (data.renders[0]?.file.height ?? 9)))}`}><div class="p-carousel" data-carousel>
   <div class="p-carousel-track" data-lightbox>
     {data.renders.map((img, i) => (
       <a
         class="lb"
+        data-aspect-ratio={Math.max(1.5, Math.min(1.85, img.file.width / img.file.height))}
         tabindex={i === 0 ? undefined : -1}
         href={renderLarge[i].src}
         data-pswp-width={renderLarge[i].attributes.width}
@@ -95,6 +96,8 @@ document.querySelectorAll('[data-carousel]').forEach(function(car){
   var links = track.querySelectorAll('a');
   var idx = 0;
   function update(){
+    var media = car.closest('.p-media');
+    if (media && links[idx]) media.style.setProperty('--slide-ratio', links[idx].dataset.aspectRatio);
     track.style.transform = 'translateX(' + (-idx*100) + '%)';
     dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
     links.forEach(function(a,i){
